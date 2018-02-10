@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rapp.history
+R Book/
+*.rda
+*.pdf
+*.xlsx
