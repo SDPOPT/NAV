@@ -49,16 +49,20 @@ snapshot <- function(date1, date2, option){
   IMCM <- left_join(IMCM, px_2)
   IMCM[is.na(IMCM)] <- 0
   IMCM <- IMCM %>%
-          mutate(cost_remain = value_remain / Quantity_remain, 
+          mutate(cost_remain = round(value_remain / Quantity_remain, digits = 2),  
                  marketvalue = Quantity_remain * px,
-                 cost_sold = amount_sold / Quantity_sold, 
+                 cost_sold = round(amount_sold / Quantity_sold, digits = 2),  
                  unreal_gain = marketvalue - value_remain,
                  unreal_gain_rate = unreal_gain / value_remain, 
                  real_gain = amount_sold - value_sold,
-                 real_gain_rate = "%1.2f%%", 100 * real_gain / amount_sold) %>%
-                 select(ID, Quantity_remain, cost_remain, px, 
-                        value_remain, marketvalue, unreal_gain, unreal_gain_rate)
+                 real_gain_rate = real_gain / amount_sold)
   IMCM[is.na(IMCM)] <- 0
+  holdings <- IMCM %>% select(ID, Quantity = Quantity_remain,
+                              Unit_cost = cost_remain, Price = px,
+                              Cost = value_remain, Market_value = marketvalue,
+                              Gain = unreal_gain, Return = unreal_gain_rate) %>%
+                              filter(Quantity > 0) %>% 
+                              arrange(grepl("HK Equity", ID), desc(Market_value))
   sprintf("%1.2f%%", 100 * unreal_gain / value_remain)
 }
 
