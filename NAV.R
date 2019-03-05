@@ -2,6 +2,7 @@ library(tidyverse)
 library(readxl)
 library(Rblpapi) 
 library(zoo)
+library(quantmod)
 
 blpConnect()
 
